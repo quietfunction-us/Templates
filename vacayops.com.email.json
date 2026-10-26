@@ -1,0 +1,46 @@
+{
+    "providerId": "vacayops.com",
+    "providerName": "VacayOps",
+    "serviceId": "email",
+    "serviceName": "VacayOps email sending",
+    "version": 1,
+    "logoUrl": "https://www.vacayops.com/assets/VacayOps-Logoicon.png",
+    "description": "Lets VacayOps send automated email (booking confirmations, reminders, campaigns) from this domain through its email provider: a domain-ownership TXT record, a DKIM signing key, and the provider's SPF include merged into any existing SPF record. Adds no MX record, so the domain's existing mailboxes keep receiving mail exactly as before.",
+    "variableDescription": "verifyid: the sending domain's id at the email provider (the value after telnyx-domain-verification=). dkimkey: the base64 RSA public key of the domain's DKIM selector (the value after p=).",
+    "syncPubKeyDomain": "vacayops.com",
+    "syncRedirectDomain": "vacayops.com",
+    "records": [
+        {
+            "type": "TXT",
+            "essential": "Always",
+            "host": "@",
+            "ttl": "3600",
+            "data": "telnyx-domain-verification=%verifyid%",
+            "txtConflictMatchingMode": "Prefix",
+            "txtConflictMatchingPrefix": "telnyx-domain-verification="
+        },
+        {
+            "type": "TXT",
+            "essential": "Always",
+            "host": "telnyx1._domainkey",
+            "ttl": "3600",
+            "data": "v=DKIM1; k=rsa; p=%dkimkey%",
+            "txtConflictMatchingMode": "All"
+        },
+        {
+            "type": "SPFM",
+            "essential": "Always",
+            "host": "@",
+            "spfRules": "include:spf.telnyx.com"
+        },
+        {
+            "type": "TXT",
+            "groupId": "dmarc",
+            "essential": "OnApply",
+            "host": "_dmarc",
+            "ttl": "3600",
+            "data": "v=DMARC1; p=none",
+            "txtConflictMatchingMode": "All"
+        }
+    ]
+}
